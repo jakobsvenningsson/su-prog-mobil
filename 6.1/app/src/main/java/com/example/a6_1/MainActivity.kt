@@ -4,7 +4,6 @@ import android.Manifest.permission
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -12,15 +11,7 @@ import android.provider.ContactsContract
 import android.widget.TextView
 import android.widget.SimpleAdapter
 import android.content.Intent
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.net.Uri
-
-
-
-
-
 
 class MainActivity : AppCompatActivity() {
     var lv: ListView? = null

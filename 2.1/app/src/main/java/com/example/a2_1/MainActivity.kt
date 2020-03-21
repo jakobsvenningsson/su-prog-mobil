@@ -37,11 +37,9 @@ class MainActivity : AppCompatActivity() {
         val primes = filterPrimes(displayNumbers(ch))
         CoroutineScope(Dispatchers.Main).launch {
             for(prime in primes) {
-                Log.d("main", prime.toString())
                 prefs.edit().putLong(getString(R.string.prime_key), prime).apply()
                 findViewById<TextView>(R.id.max_prime_view).apply { text = prime.toString() }
             }
-            Log.d("main", "done.")
         }
         return job
     }
@@ -55,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                     ch.send(n)
                 }
             } finally {
-                Log.d("numbersFrom", "done.")
                 ch.close()
             }
         }
@@ -70,7 +67,6 @@ class MainActivity : AppCompatActivity() {
                 ch.send(n)
             }
             ch.close()
-            Log.d("displayNumbers","done.")
         }
         return ch
     }
@@ -84,7 +80,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             ch.close()
-            Log.d("filterPrimes","done.")
         }
         return ch
     }

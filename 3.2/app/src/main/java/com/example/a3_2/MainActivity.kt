@@ -15,6 +15,12 @@ import androidx.core.app.ActivityCompat
 import java.io.File
 import java.io.IOException
 
+/*
+ * The MediaRecorder API does not work on the android emulator.
+ * There I have not been able to properly test this assignment
+ * since I do not have access to a android device. Keep this in
+ * mind when correcting.
+ */
 
 class MainActivity : AppCompatActivity() {
     private var playBtn: Button? = null

@@ -8,6 +8,13 @@ import android.os.Vibrator
 import android.util.Log
 import android.view.View
 
+
+/*
+ * I was not able to test this assignment since
+ * it requires a physical android device which I
+ * do not have access to.
+ */
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
