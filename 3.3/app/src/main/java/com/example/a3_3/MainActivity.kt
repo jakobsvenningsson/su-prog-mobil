@@ -9,6 +9,9 @@ import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.provider.MediaStore
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Parcelable
 import android.widget.VideoView
 import java.io.File
 import java.io.IOException
@@ -20,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private var recordBtn: Button? = null
     private var videoView: VideoView? = null
     private var videoFile: File? = null
+    private var uri: Uri? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +55,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putParcelable("videoUri", this.uri)
+        super.onSaveInstanceState(savedInstanceState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        val uri = savedInstanceState.getParcelable<Parcelable>("videoUri") as Uri?
+        videoView?.setVideoURI(uri)
+        videoView?.start()
+    }
+
     private fun startVideo() {
         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, this.videoFile)
@@ -72,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         if (requestCode != videoReqCode || resultCode != Activity.RESULT_OK) {
             return
         }
+        this.uri = data?.data
         videoView?.setVideoURI(data?.data)
         videoView?.start()
     }

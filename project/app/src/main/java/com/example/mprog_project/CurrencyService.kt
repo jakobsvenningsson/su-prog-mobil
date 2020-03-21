@@ -12,8 +12,6 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class CurrencyService(val context: Context) {
-    private val apiKey = "b0c18848-aebc-4cfd-952b-107f83845292"
-    private val apiForex = "https://v2.api.forex"
     private val apiOpen = "https://api.exchangeratesapi.io"
 
     suspend fun currencies() = suspendCoroutine<ArrayList<String>> { cont ->
@@ -75,5 +73,4 @@ class CurrencyService(val context: Context) {
         )
         queue.add(req)
     }
-
 }

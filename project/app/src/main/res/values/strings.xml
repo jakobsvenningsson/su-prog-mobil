@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">mprog-project</string>
+    <string name="most_recent"><u>Most Recent</u></string>
+    <string name="favourites"><u>Favourites</u></string>
+    <string name="add_to_favourites"><u>Add to Favourites!</u></string>
+    <string name="FAV_LIST_KEY">fav_list_key</string>
+    <string name="FAV_MAP_KEY">fav_map_key</string>
+    <string name="MOST_RECENT_LIST_KEY">history_list_key</string>
+    <string name="MOST_RECENT_EXTRA">most_recent_extra</string>
+    <string name="MOST_RECENT_RETURN_EXTRA">most_recent_return_extra</string>
+    <string name="FAVOURITES_EXTRA">favourites_extra</string>
+    <string name="FAVOURITES_RETURN_EXTRA">favourites_return_extra</string>
 </resources>

@@ -2,32 +2,27 @@ package com.example.a3_2
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.media.MediaRecorder
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import java.io.File
 import java.io.IOException
-
-/*
- * The MediaRecorder API does not work on the android emulator.
- * There I have not been able to properly test this assignment
- * since I do not have access to a android device. Keep this in
- * mind when correcting.
- */
 
 class MainActivity : AppCompatActivity() {
     private var playBtn: Button? = null
     private var recordBtn: Button? = null
     private var stopBtn: Button? = null
     private var audioFile: File? = null
-    private val recorder = MediaRecorder()
+    private var recorder: MediaRecorder? = null
     private val reqCode = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,20 +35,39 @@ class MainActivity : AppCompatActivity() {
 
         this.stopBtn?.isEnabled = false
         this.playBtn?.isEnabled = false
-
-        if(!checkPermission((Manifest.permission.RECORD_AUDIO))) {
-            requestPermission(Manifest.permission.RECORD_AUDIO)
-        }
+        this.recordBtn?.isEnabled = true
     }
 
     fun record(view: View) {
+        if(!checkPermission((Manifest.permission.RECORD_AUDIO))) {
+            requestPermission(Manifest.permission.RECORD_AUDIO)
+            return
+        }
         this.stopBtn?.isEnabled = true
         this.playBtn?.isEnabled = false
         this.recordBtn?.isEnabled = false
 
         try {
-            recorder.prepare()
-            recorder.start()
+            this.audioFile = File.createTempFile("sound", ".3gp", this.cacheDir)
+        } catch (e: IOException) {
+            Log.e("onCreate", "external storage access error")
+            return
+        }
+
+        recorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            if(Build.VERSION.SDK_INT < 26) {
+                setOutputFile(audioFile?.getAbsolutePath());
+            } else {
+                setOutputFile(audioFile);
+            }
+        }
+
+        try {
+            recorder?.prepare()
+            recorder?.start()
         } catch(e: Exception) {
             Log.d("record", "Exception when trying to start recording.")
             e.printStackTrace()
@@ -66,8 +80,9 @@ class MainActivity : AppCompatActivity() {
         this.recordBtn?.isEnabled = true
 
         try {
-            recorder.stop()
-            recorder.release()
+            recorder?.stop()
+            recorder?.release()
+            recorder = null
         } catch(e: Exception) {
             Log.d("play", "Exception when trying to stop recording.")
             e.printStackTrace()
@@ -84,6 +99,8 @@ class MainActivity : AppCompatActivity() {
             MediaPlayer.create(this, uri).apply {
                 start()
             }
+            Log.d("play", "Played: " + uri.toString())
+
         } catch(e: Exception) {
             Log.d("play", "Exception when trying to play recording.")
             e.printStackTrace()
@@ -94,17 +111,7 @@ class MainActivity : AppCompatActivity() {
         if (requestCode != this.reqCode) {
             return
         }
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-        try {
-            this.audioFile = File.createTempFile("sound", ".3gp", this.cacheDir)
-        } catch (e: IOException) {
-            Log.e("onCreate", "external storage access error")
-            return
-        }
-        recorder.setOutputFile(this.audioFile);
+        this.recordBtn?.isEnabled = true
     }
 
     private fun checkPermission(permission: String): Boolean {
