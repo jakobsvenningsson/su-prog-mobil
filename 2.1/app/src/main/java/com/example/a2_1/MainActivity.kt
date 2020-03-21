@@ -12,7 +12,15 @@ import kotlin.math.sqrt
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlin.Long.Companion.MAX_VALUE
+import java.lang.Long.MAX_VALUE
+
+
+/*
+ * I have chosen to implement the following assignment using coroutines
+ * and message passing. I have done a bit of programming in Google's Go programming
+ * language which also supports light weight threads (goroutines) and message passing and
+ * I was excited to get the opportunity to try out Kotlin's couroutines.
+ */
 
 class MainActivity : AppCompatActivity() {
     private var job: Job? = null
@@ -49,6 +57,8 @@ class MainActivity : AppCompatActivity() {
         val job = CoroutineScope(Dispatchers.Default).launch {
             try {
                 for(n in start..MAX_VALUE) {
+                    // Put some delay between producing new numbers to make the program
+                    // a bit less CPU intense.
                     delay(100L)
                     ch.send(n)
                 }
